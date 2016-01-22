@@ -3,7 +3,7 @@ CFLAGS=-Wall -std=c99
 CC=clang
 
 repl:
-	$(CC) $(CFLAGS) -ledit src/repl.c -o repl
+	$(CC) $(CFLAGS) src/repl.c extern/mpc/mpc.c -ledit -lm -o repl
 
 parser:
-	$(CC) $(CFLAGS) src/repl.c extern/mpc/mpc.c -lm -o parser
+	$(CC) $(CFLAGS) src/parser.c extern/mpc/mpc.c -lm -o parser
