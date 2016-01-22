@@ -4,3 +4,6 @@ CC=clang
 
 repl:
 	$(CC) $(CFLAGS) -ledit src/repl.c -o repl
+
+parser:
+	$(CC) $(CFLAGS) src/repl.c extern/mpc/mpc.c -lm -o parser
