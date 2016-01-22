@@ -28,7 +28,6 @@ char* readline(char* prompt) {
   cpy[strlen(cpy) - 1] = '\0';
   return cpy;
 }
-
 /* Fake add_history on windows. */
 void add_history(char* unused) {}
 
@@ -48,7 +47,9 @@ int main(int argc, char** argv) {
   mpca_lang(MPCA_LANG_DEFAULT,
             " \
              number: /-?[0-9]+/; \
-             operator: '+' | '-' | '*' | '/' | '%' | '^'; \
+             operator: '+' | '-' | '*' | '/' | '%' | '^' | \
+                       \"add\" | \"sub\" | \"mul\" | \"div\" | \"mod\" | \
+                       \"exp\" | \"succ\" ; \
              expr: <number> | '(' <operator> <expr>+ ')'; \
              lisp_p: /^/ <operator> <expr>+ /$/; \
             ",
