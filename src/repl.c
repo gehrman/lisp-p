@@ -1,8 +1,10 @@
 /*
 IDEA: command count in prompt + unsaved keystroke to clear count
 
-TODO: Replace libedit with linenoise once things are working, and
-      I'm a a little more familiar with C.
+TODO:
+- Replace libedit with linenoise once things are working, and
+  I'm a a little more familiar with C.
+- BSD-licensed bignum support.
 */
 
 #include <stdio.h>
@@ -67,12 +69,21 @@ int main(int argc, char** argv) {
        ourselves. */
     add_history(input);
 
-    /* Like I said, no actual E in the REPL yet. */
-    printf("No you're a towel. Now where's my %s?\n\n", input);
+    /* Start working towards an E in the REPL. */
+    mpc_result_t r;
+    if (mpc_parse("<stdin>", input, Lisp_P, &r)) {
+      mpc_ast_print(r.output);
+      mpc_ast_delete(r.output);
+    } else {
+      mpc_err_print(r.error);
+      mpc_err_delete(r.error);
+    }
 
     /* We're done with input, so it's time to free it. */
     free(input);
   }
+
+  mpc_cleanup(4, Lisp_P, Expression, Operator, Number);
 
   return 0;
 }
