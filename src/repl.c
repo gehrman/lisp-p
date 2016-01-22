@@ -8,6 +8,8 @@ TODO: Replace libedit with linenoise once things are working, and
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../extern/mpc/mpc.h"
+
 /* there has to be a better way to do cross-platform work...
    this seems vile */
 #ifdef _WIN32
@@ -34,6 +36,22 @@ void add_history(char* unused) {}
 #endif
 
 int main(int argc, char** argv) {
+  /* build our parsers */
+  mpc_parser_t* Number = mpc_new("number");
+  mpc_parser_t* Operator = mpc_new("operator");
+  mpc_parser_t* Expression = mpc_new("expr");
+  mpc_parser_t* Lisp_P = mpc_new("lisp_p");
+
+  /* define our language */
+  mpca_lang(MPCA_LANG_DEFAULT,
+            " \
+             number: /-?[0-9]+/; \
+             operator: '+' | '-' | '*' | '/' | '%' | '^'; \
+             expr: <number> | '(' <operator> <expr>+ ')'; \
+             lisp_p: /^/ <operator> <expr>+ /$/; \
+            ",
+            Number, Operator, Expression, Lisp_P);
+
   puts("LispP Version 0.0");
   puts("Ctrl-C to Exit.\n");
 
